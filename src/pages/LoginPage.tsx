@@ -1,28 +1,14 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
+import React, { useState } from 'react';
+
 export default function LoginPage() {
+  const [userType, setUserType] = useState('user'); // Default to 'user'
+
+  const handleUserTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setUserType(event.target.value);
+  };
+
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-white">
-        <body class="h-full">
-        ```
-      */}
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
@@ -77,6 +63,25 @@ export default function LoginPage() {
             </div>
 
             <div>
+              <label htmlFor="user-type" className="block text-sm font-medium leading-6 text-gray-900">
+                Select User Type
+              </label>
+              <div className="mt-2">
+                <select
+                  id="user-type"
+                  name="user-type"
+                  value={userType}
+                  onChange={handleUserTypeChange}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                >
+                  <option value="user">User</option>
+                  <option value="distributor">Distributor</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -85,15 +90,8 @@ export default function LoginPage() {
               </button>
             </div>
           </form>
-
-          <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{' '}
-            <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-              Start a 14 day free trial
-            </a>
-          </p>
         </div>
       </div>
     </>
-  )
+  );
 }
