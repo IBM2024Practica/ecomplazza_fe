@@ -3,13 +3,14 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import StoreFront from './pages/StoreFront';
 import LoginPage from './pages/LoginPage';
 import ProductList from './pages/ProductList';
-
+import RegisterPage from './pages/RegisterPage';
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<StoreFront />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element = {<RegisterPage/>}/>
         <Route path="/products/:category/:subcategory" element={<ProductList />} />
       </Routes>
     </Router>

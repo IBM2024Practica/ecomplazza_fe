@@ -204,7 +204,7 @@ export default function Header() {
   
               <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                 <div className="flow-root">
-                  <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                  <a href="/register" className="-m-2 block p-2 font-medium text-gray-900">
                     Create an account
                   </a>
                 </div>
@@ -275,7 +275,7 @@ export default function Header() {
                   <a href="/login" className="text-sm font-medium text-white hover:text-gray-100">
                     Sign in
                   </a>
-                  <a href="#" className="text-sm font-medium text-white hover:text-gray-100">
+                  <a href="/register" className="text-sm font-medium text-white hover:text-gray-100">
                     Create an account
                   </a>
                 </div>
