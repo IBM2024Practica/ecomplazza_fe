@@ -17,6 +17,8 @@ type Product = {
 
 const ProductList = () => {
   const { category, subcategory } = useParams<{ category: string; subcategory: string }>();
+  console.log('Category:', category);
+console.log('Subcategory:', subcategory);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
