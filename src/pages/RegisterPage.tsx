@@ -71,59 +71,7 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            <div>
-              <label htmlFor="user-type" className="block text-sm font-medium leading-6 text-gray-900">
-                Select User Type
-              </label>
-              <div className="mt-2">
-                <select
-                  id="user-type"
-                  name="user-type"
-                  value={userType}
-                  onChange={handleUserTypeChange}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                >
-                  <option value="user">User</option>
-                  <option value="distributor">Distributor</option>
-                </select>
-              </div>
-            </div>
-
-            {userType === 'distributor' && (
-              <>
-                <div>
-                  <label htmlFor="company-name" className="block text-sm font-medium leading-6 text-gray-900">
-                    Company Name
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="company-name"
-                      name="company-name"
-                      type="text"
-                      required
-                      autoComplete="organization"
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="company-address" className="block text-sm font-medium leading-6 text-gray-900">
-                    Company Address
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="company-address"
-                      name="company-address"
-                      type="text"
-                      required
-                      autoComplete="street-address"
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-              </>
-            )}
+            
 
             <div>
               <button
