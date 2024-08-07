@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: 'https://ecomplazza.serveftp.com/api',
+    baseURL: 'https://ecomplazza.serveftp.com/api/products',
     headers: {
         'Content-Type': 'application/json',
     },
