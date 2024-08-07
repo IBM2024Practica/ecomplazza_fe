@@ -38,7 +38,7 @@ const WomenPage: React.FC = () => {
         params.material = filters.materials.join(',');
       }
 
-      const response = await axios.get('http://localhost:5000/api/products/products', { params });
+      const response = await axios.get('https://ecomplazza.serveftp.com/api/products/products', { params });
       setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);

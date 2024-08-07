@@ -18,7 +18,7 @@ const AdminPanelPage: React.FC = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/users/get', {
+      const response = await fetch('https://ecomplazza.serveftp.com/api/users/get', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
@@ -31,7 +31,7 @@ const AdminPanelPage: React.FC = () => {
   const handleRoleChange = async (userId: string, role: string) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/users/${userId}/role`, {
+      const response = await fetch(`https://ecomplazza.serveftp.com/api/users/${userId}/role`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

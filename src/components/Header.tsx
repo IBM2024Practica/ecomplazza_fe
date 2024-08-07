@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, addToCart, removeFromCart })
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      fetch('http://localhost:5000/api/users/verifySession', {
+      fetch('https://ecomplazza.serveftp.com/api/users/verifySession', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -24,7 +24,7 @@ const KidsPage: React.FC = () => {
   const fetchProducts = async () => {
     const params: any = { category: 'kids', subcategory: filters.subcategories.join(','), minPrice: filters.minPrice, maxPrice: filters.maxPrice, material: filters.materials.join(',') };
     try {
-      const response = await axios.get('http://localhost:5000/api/products/products', { params });
+      const response = await axios.get('https://ecomplazza.serveftp.com/api/products/products', { params });
       setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);

@@ -32,7 +32,7 @@ const DashboardPage: React.FC = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/products/products');
+      const response = await axios.get('https://ecomplazza.serveftp.com/api/products/products');
       setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -42,7 +42,7 @@ const DashboardPage: React.FC = () => {
   const fetchOrders = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/orders', {
+      const response = await axios.get('https://ecomplazza.serveftp.com/api/orders', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(response.data);
@@ -72,7 +72,7 @@ const DashboardPage: React.FC = () => {
         formData.append(`sizes[${index}][quantity]`, size.quantity?.toString() || '0');
       });
 
-      await axios.post('http://localhost:5000/api/products', formData, {
+      await axios.post('https://ecomplazza.serveftp.com/api/products', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,

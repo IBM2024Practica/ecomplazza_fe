@@ -28,7 +28,7 @@ const AccessoriesPage: React.FC = () => {
       if (filters.minPrice !== '') params.minPrice = filters.minPrice;
       if (filters.maxPrice !== '') params.maxPrice = filters.maxPrice;
       if (filters.materials.length > 0) params.material = filters.materials.join(',');
-      const response = await axios.get('http://localhost:5000/api/products/products', { params });
+      const response = await axios.get('https://ecomplazza.serveftp.com/api/products/products', { params });
       setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
