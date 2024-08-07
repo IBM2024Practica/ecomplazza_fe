@@ -18,3 +18,11 @@ export interface Product {
     quantity?: number;
   }
   
+  export interface Order {
+    _id: string;
+    user: { name: string };
+    products: Product[];
+    total: number;
+    date: string;
+    address: string;
+  }

@@ -2,16 +2,16 @@
 import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { Product } from '../types';
+import { useCart } from '../contexts/CartContext';
+import { useUser } from '../App';
 
 const HomePage: React.FC = () => {
+  const { cartItems, addToCart, removeFromCart } = useCart();
+  const { user, setUser } = useUser();
+
   return (
     <div>
-      <Header cartItems={[]} addToCart={function (product: Product, size: string, color: string): void {
-        throw new Error('Function not implemented.');
-      } } removeFromCart={function (index: number): void {
-        throw new Error('Function not implemented.');
-      } } />
+      <Header cartItems={cartItems} addToCart={addToCart} removeFromCart={removeFromCart} />
       <main className="bg-white">
         <section className="relative bg-gray-800 text-white">
           <div className="absolute inset-0">

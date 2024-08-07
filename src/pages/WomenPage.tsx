@@ -7,17 +7,19 @@ import SubcategoryFilter from '../components/SubCategoryFilter';
 import PriceFilter from '../components/PriceFilter';
 import MaterialFilter from '../components/MaterialFilter';
 import { Product } from '../types';
-import { useCart } from '../Contexts/CartContext';
+import { useCart } from '../contexts/CartContext';
+import { useUser } from '../App';
 
 const WomenPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const { cartItems, addToCart, removeFromCart } = useCart();
+  const { user, setUser } = useUser();
   const [filters, setFilters] = useState({
     subcategories: [] as string[],
     minPrice: '' as number | '',
     maxPrice: '' as number | '',
     materials: [] as string[],
   });
-  const { cartItems, addToCart, removeFromCart } = useCart();
 
   const fetchProducts = async () => {
     try {

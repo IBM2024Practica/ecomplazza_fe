@@ -7,7 +7,8 @@ import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import Cart from './Cart';
 import { Product } from '../types';
-import { useCart } from '../Contexts/CartContext';
+import { useCart } from '../contexts/CartContext';
+import { useUser } from '../App';
 
 interface HeaderProps {
   cartItems: Product[];
@@ -26,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, addToCart, removeFromCart })
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [user, setUser] = useState<{ id: string; name: string; role: string } | null>(null);
+  const { user, setUser } = useUser();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -45,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, addToCart, removeFromCart })
         })
         .catch(error => console.error('Eroare la verificarea sesiunii:', error));
     }
-  }, []);
+  }, [setUser]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -78,6 +79,14 @@ const Header: React.FC<HeaderProps> = ({ cartItems, addToCart, removeFromCart })
                   {category.name}
                 </Link>
               ))}
+              {(user?.role === 'admin' || user?.role === 'distributor') && (
+                <Link
+                  to="/dashboard"
+                  className="relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800"
+                >
+                  Dashboard
+                </Link>
+              )}
             </div>
 
             <div className="flex flex-1 items-center justify-end">

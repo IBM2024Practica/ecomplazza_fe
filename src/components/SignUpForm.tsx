@@ -47,7 +47,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ setIsOpen, setUser }) => {
     <form className="space-y-6" onSubmit={handleSubmit}>
       <div>
         <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-          Nume Utilizator
+          Username
         </label>
         <input
           type="text"
@@ -60,7 +60,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ setIsOpen, setUser }) => {
       </div>
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          Adresa de email
+          E-mail adress
         </label>
         <input
           type="email"
@@ -86,7 +86,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ setIsOpen, setUser }) => {
       </div>
       <div>
         <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
-          Confirmă Parola
+          Confirm Password
         </label>
         <input
           type="password"
@@ -102,7 +102,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ setIsOpen, setUser }) => {
           type="submit" 
           className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          Creează Cont
+          Create Account
         </button>
       </div>
     </form>

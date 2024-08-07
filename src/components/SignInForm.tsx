@@ -40,7 +40,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsOpen, setUser }) => {
     <form className="space-y-6" onSubmit={handleSubmit}>
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          Adresa de email
+          E-mail adress
         </label>
         <input
           type="email"
@@ -53,7 +53,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsOpen, setUser }) => {
       </div>
       <div>
         <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-          Parola
+          Password
         </label>
         <input
           type="password"
@@ -73,12 +73,12 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsOpen, setUser }) => {
             className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
           />
           <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-            Ține-mă minte
+            Remember me
           </label>
         </div>
         <div className="text-sm">
           <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-            Ți-ai uitat parola?
+            Forgot your password? 
           </a>
         </div>
       </div>
@@ -87,7 +87,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ setIsOpen, setUser }) => {
           type="submit"
           className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          Logare
+          Log in 
         </button>
       </div>
     </form>
