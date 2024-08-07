@@ -5,7 +5,7 @@ import { getProductsByCategory } from '../api/api';
 import Header from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
-import { XMarkIcon, StarIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 type Product = {
   name: string;
@@ -70,7 +70,7 @@ const ProductList = () => {
       <div className="bg-white mt-6">
         <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <div className="border-b border-gray-200 pb-10">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">{subcategory}</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900">{subcategory || 'All Products'}</h1>
             <p className="mt-4 text-base text-gray-500">
               Checkout out the latest release of Basic Tees, new and improved with four openings!
             </p>
@@ -146,18 +146,6 @@ const ProductList = () => {
                             <h4 className="sr-only">Reviews</h4>
                             <div className="flex items-center">
                               <p className="text-sm text-gray-700">4.5 <span className="sr-only"> out of 5 stars</span></p>
-                              {/* <div className="ml-1 flex items-center">
-                                {[0, 1, 2, 3, 4].map((rating) => (
-                                  <StarIcon
-                                    key={rating}
-                                    aria-hidden="true"
-                                    className={classNames(
-                                      4.5 > rating ? 'text-yellow-400' : 'text-gray-200',
-                                      'h-5 w-5 flex-shrink-0',
-                                    )}
-                                  />
-                                ))}
-                              </div> */}
                             </div>
                           </div>
                         </section>
