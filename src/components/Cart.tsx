@@ -1,17 +1,19 @@
+// src/components/Cart.tsx
 import React from 'react';
 import { Product } from '../types';
+import { useNavigate } from 'react-router-dom';
 
 interface CartProps {
   cartItems: Product[];
   onClose: () => void;
-  removeFromCart: (index: number) => void; // Functia pentru a sterge produsul
+  removeFromCart: (index: number) => void;
 }
 
 const Cart: React.FC<CartProps> = ({ cartItems, onClose, removeFromCart }) => {
-    console.log('Cart items:', cartItems);
-    
-    // Calcularea prețului total
-    const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
+  const navigate = useNavigate();
+
+  // Calcularea prețului total
+  const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
 
   return (
     <div className="relative w-full max-w-md bg-white shadow-xl">
@@ -57,7 +59,7 @@ const Cart: React.FC<CartProps> = ({ cartItems, onClose, removeFromCart }) => {
         {cartItems.length > 0 && (
           <div className="mt-4">
             <p className="text-lg font-semibold">Total: ${totalPrice.toFixed(2)}</p>
-            <button onClick={() => console.log('Go to Checkout')} className="w-full mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button onClick={() => navigate('/checkout')} className="w-full mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
               Go to Checkout
             </button>
           </div>

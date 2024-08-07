@@ -7,6 +7,7 @@ import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import Cart from './Cart';
 import { Product } from '../types';
+import { useCart } from '../Contexts/CartContext';
 
 interface HeaderProps {
   cartItems: Product[];

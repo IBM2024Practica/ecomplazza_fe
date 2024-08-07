@@ -1,3 +1,4 @@
+// src/pages/WomenPage.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
@@ -6,6 +7,7 @@ import SubcategoryFilter from '../components/SubCategoryFilter';
 import PriceFilter from '../components/PriceFilter';
 import MaterialFilter from '../components/MaterialFilter';
 import { Product } from '../types';
+import { useCart } from '../Contexts/CartContext';
 
 const WomenPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -15,7 +17,7 @@ const WomenPage: React.FC = () => {
     maxPrice: '' as number | '',
     materials: [] as string[],
   });
-  const [cartItems, setCartItems] = useState<Product[]>([]);
+  const { cartItems, addToCart, removeFromCart } = useCart();
 
   const fetchProducts = async () => {
     try {
@@ -57,21 +59,9 @@ const WomenPage: React.FC = () => {
     setFilters((prev) => ({ ...prev, materials: selected }));
   };
 
-  const addToCart = (product: Product, size: string, color: string) => {
-    console.log('Product added to cart:', product, size, color);
-    setCartItems((prevCartItems) => [
-      ...prevCartItems,
-      { ...product, selectedSize: size, selectedColor: color, quantity: 1 },
-    ]);
-  };
-  const removeFromCart = (index: number) => {
-    setCartItems((currentCartItems) => currentCartItems.filter((_, i) => i !== index));
-  };
-
   return (
     <div>
-     <Header cartItems={cartItems} addToCart={addToCart} removeFromCart={removeFromCart} />
-
+      <Header cartItems={cartItems} addToCart={addToCart} removeFromCart={removeFromCart} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex">
           <aside className="w-1/4 pr-4">

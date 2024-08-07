@@ -1,3 +1,4 @@
+// src/pages/AccessoriesPage.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
@@ -6,10 +7,11 @@ import SubcategoryFilter from '../components/SubCategoryFilter';
 import PriceFilter from '../components/PriceFilter';
 import MaterialFilter from '../components/MaterialFilter';
 import { Product } from '../types';
+import { useCart } from '../Contexts/CartContext';
 
 const AccessoriesPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [cartItems, setCartItems] = useState<Product[]>([]);
+  const { cartItems, addToCart, removeFromCart } = useCart();
   const [filters, setFilters] = useState({
     subcategories: [] as string[],
     minPrice: '' as number | '',
@@ -38,17 +40,6 @@ const AccessoriesPage: React.FC = () => {
   const handleSubcategoryChange = (selected: string[]) => setFilters((prev) => ({ ...prev, subcategories: selected }));
   const handlePriceChange = (minPrice: number, maxPrice: number) => setFilters((prev) => ({ ...prev, minPrice, maxPrice }));
   const handleMaterialChange = (selected: string[]) => setFilters((prev) => ({ ...prev, materials: selected }));
-
-  const addToCart = (product: Product, size: string, color: string) => {
-    setCartItems((prevItems) => [
-      ...prevItems,
-      { ...product, selectedSize: size, selectedColor: color, quantity: 1 }
-    ]);
-  };
-
-  const removeFromCart = (index: number) => {
-    setCartItems((currentItems) => currentItems.filter((_, i) => i !== index));
-  };
 
   return (
     <div>
