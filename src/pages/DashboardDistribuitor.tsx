@@ -23,6 +23,7 @@ const DashboardPage: React.FC = () => {
     color: '',
     sizes: [{ size: '', quantity: 0 }],
   });
+  const [image, setImage] = useState<File | null>(null); // Adăugat pentru gestionarea imaginii
 
   useEffect(() => {
     fetchProducts();
@@ -54,8 +55,28 @@ const DashboardPage: React.FC = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/products', newProduct, {
-        headers: { Authorization: `Bearer ${token}` },
+      const formData = new FormData();
+      formData.append('name', newProduct.name || '');
+      formData.append('price', newProduct.price?.toString() || '');
+      formData.append('brand', newProduct.brand || '');
+      formData.append('category', newProduct.category || '');
+      formData.append('subcategory', newProduct.subcategory || '');
+      formData.append('description', newProduct.description || '');
+      formData.append('material', newProduct.material || '');
+      formData.append('color', newProduct.color || '');
+      if (image) {
+        formData.append('image', image);
+      }
+      newProduct.sizes?.forEach((size, index) => {
+        formData.append(`sizes[${index}][size]`, size.size || '');
+        formData.append(`sizes[${index}][quantity]`, size.quantity?.toString() || '0');
+      });
+
+      await axios.post('http://localhost:5000/api/products', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
       });
       fetchProducts();
       setNewProduct({
@@ -69,6 +90,7 @@ const DashboardPage: React.FC = () => {
         color: '',
         sizes: [{ size: '', quantity: 0 }],
       });
+      setImage(null); // Resetare imagine
     } catch (error) {
       console.error('Error adding product:', error);
     }
@@ -162,65 +184,15 @@ const DashboardPage: React.FC = () => {
                   required
                 />
               </div>
-              {/* <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Sizes</label>
-                {newProduct.sizes.map((size, index) => (
-                  <div key={index} className="flex space-x-2 mb-2">
-                    <input
-                      type="text"
-                      value={size.size}
-                      onChange={(e) =>
-                        setNewProduct({
-                          ...newProduct,
-                          sizes: newProduct.sizes.map((s, i) =>
-                            i === index ? { ...s, size: e.target.value } : s
-                          ),
-                        })
-                      }
-                      placeholder="Size"
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                    />
-                    <input
-                      type="number"
-                      value={size.quantity}
-                      onChange={(e) =>
-                        setNewProduct({
-                          ...newProduct,
-                          sizes: newProduct.sizes.map((s, i) =>
-                            i === index ? { ...s, quantity: parseInt(e.target.value, 10) } : s
-                          ),
-                        })
-                      }
-                      placeholder="Quantity"
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setNewProduct({
-                          ...newProduct,
-                          sizes: newProduct.sizes.filter((_, i) => i !== index),
-                        })
-                      }
-                      className="mt-1 bg-red-500 text-white p-2 rounded-md"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() =>
-                    setNewProduct({
-                      ...newProduct,
-                      sizes: [...newProduct.sizes, { size: '', quantity: 0 }],
-                    })
-                  }
-                  className="mt-2 bg-blue-500 text-white p-2 rounded-md"
-                >
-                  Add Size
-                </button>
-              </div> */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Image</label>
+                <input
+                  type="file"
+                  onChange={(e) => setImage(e.target.files?.[0] || null)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  required
+                />
+              </div>
               <button
                 type="submit"
                 className="mt-4 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700"
@@ -233,36 +205,23 @@ const DashboardPage: React.FC = () => {
           <section>
             <h2 className="text-2xl font-bold mb-4">View All Orders</h2>
             <div className="bg-white p-4 rounded shadow overflow-auto max-h-96">
-              <table className="min-w-full bg-white">
-                <thead>
-                  <tr>
-                    <th className="py-2">Order ID</th>
-                    <th className="py-2">User</th>
-                    <th className="py-2">Products</th>
-                    <th className="py-2">Total</th>
-                    <th className="py-2">Date</th>
-                    <th className="py-2">Address</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order) => (
-                    <tr key={order._id}>
-                      <td className="py-2">{order._id}</td>
-                      <td className="py-2">{order.user.name}</td>
-                      <td className="py-2">
-                        <ul>
-                          {order.products.map((product: Product) => (
-                            <li key={product._id}>{product.name}</li>
-                          ))}
-                        </ul>
-                      </td>
-                      <td className="py-2">${order.total}</td>
-                      <td className="py-2">{new Date(order.date).toLocaleDateString()}</td>
-                      <td className="py-2">{order.address}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              {orders.map((order) => (
+                <div key={order._id} className="mb-4 p-4 border rounded-md shadow">
+                  <h3 className="text-lg font-semibold mb-2">Order ID: {order._id}</h3>
+                  <p className="text-sm text-gray-700 mb-1"><strong>User:</strong> {order.user.name}</p>
+                  <p className="text-sm text-gray-700 mb-1"><strong>Total:</strong> ${order.total}</p>
+                  <p className="text-sm text-gray-700 mb-1"><strong>Date:</strong> {new Date(order.date).toLocaleDateString()}</p>
+                  <p className="text-sm text-gray-700 mb-1"><strong>Address:</strong> {order.address}</p>
+                  <div className="mt-2">
+                    <strong>Products:</strong>
+                    <ul className="list-disc list-inside">
+                      {order.products.map((product: Product) => (
+                        <li key={product._id}>{product.name}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
             </div>
           </section>
         </div>

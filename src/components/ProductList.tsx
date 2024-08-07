@@ -24,16 +24,19 @@ const ProductList: React.FC<ProductListProps> = ({ products, addToCart }) => {
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product) => (
-          <div key={product._id} className="bg-white shadow-md rounded-lg p-4" onClick={() => openModal(product)}>
-            <h3 className="text-lg font-bold">{product.name}</h3>
-            <p className="text-gray-500">{product.description}</p>
-            <p className="text-gray-900 font-semibold">{product.price} USD</p>
-            <p className="text-gray-500">Brand: {product.brand}</p>
-            <p className="text-gray-500">Material: {product.material}</p>
-            <p className="text-gray-500">Color: {product.color}</p>
-          </div>
-        ))}
+      {products.map((product) => (
+  <div key={product._id} className="bg-white shadow-md rounded-lg p-4" onClick={() => openModal(product)}>
+ 
+    <img src={`http://localhost:5000/${product.imageUrl}`} alt={product.name} className="w-full h-48 object-cover rounded-lg mb-4" />
+    <h3 className="text-lg font-bold">{product.name}</h3>
+    <p className="text-gray-500">{product.description}</p>
+    <p className="text-gray-900 font-semibold">{product.price} USD</p>
+    <p className="text-gray-500">Brand: {product.brand}</p>
+    <p className="text-gray-500">Material: {product.material}</p>
+    <p className="text-gray-500">Color: {product.color}</p>
+  </div>
+))}
+
       </div>
       {selectedProduct && (
         <ProductModal

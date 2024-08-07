@@ -13,6 +13,7 @@ export interface Product {
       size: string;
       quantity: number;
     }>;
+    imageUrl: string; // Adăugat câmpul pentru imagine
     selectedSize?: string;
     selectedColor?: string;
     quantity?: number;
@@ -26,3 +27,11 @@ export interface Product {
     date: string;
     address: string;
   }
+  
+  export interface User {
+    _id: string;
+    username: string;
+    email: string;
+    role: 'admin' | 'distributor' | 'customer';
+  }
+  

@@ -16,7 +16,7 @@ interface HeaderProps {
   removeFromCart: (index: number) => void;
 }
 
-const categories = [
+const categories = [    
   { name: 'Women', href: '/women' },
   { name: 'Men', href: '/men' },
   { name: 'Kids', href: '/kids' },
@@ -79,12 +79,20 @@ const Header: React.FC<HeaderProps> = ({ cartItems, addToCart, removeFromCart })
                   {category.name}
                 </Link>
               ))}
-              {(user?.role === 'admin' || user?.role === 'distributor') && (
+              {user?.role === 'distributor' && (
                 <Link
                   to="/dashboard"
                   className="relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800"
                 >
                   Dashboard
+                </Link>
+              )}
+              {user?.role === 'admin' && (
+                <Link
+                  to="/admin-panel"
+                  className="relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800"
+                >
+                  Admin Panel
                 </Link>
               )}
             </div>

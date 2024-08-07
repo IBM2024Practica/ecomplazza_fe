@@ -7,9 +7,9 @@ import MenPage from './pages/MenPage';
 import WomenPage from './pages/WomenPage';
 import AccessoriesPage from './pages/AccessoriesPage';
 import CheckoutPage from './pages/CheckoutPage';
-import DashboardPage from './pages/Dashboard';
+import DashboardPage from './pages/DashboardDistribuitor';
 import { CartProvider } from './contexts/CartContext';
-
+import AdminPanelPage from './pages/AdminPanelPage';
 interface UserContextProps {
   user: { id: string; name: string; role: string } | null;
   setUser: (user: { id: string; name: string; role: string } | null) => void;
@@ -48,6 +48,7 @@ const App: React.FC = () => {
             <Route path="/accessories" element={<AccessoriesPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/admin-panel" element = {<AdminPanelPage/>} />
           </Routes>
         </Router>
       </UserProvider>
