@@ -144,7 +144,7 @@ export default function Header() {
     const { email, password } = e.target.elements
 
     try {
-      const res = await fetch('http://10.0.0.30:5000/api/users/login', {
+      const res = await fetch('https://ecomplazza.serveftp.com/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ export default function Header() {
     const { username, email, password} = e.target.elements
 
     try {
-      const res = await fetch('http://10.0.0.30:5000/api/users/register', {
+      const res = await fetch('https://ecomplazza.serveftp.com//api/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -194,7 +194,7 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch('http://10.0.0.30:5000/api/users/logout', {
+      const res = await fetch('https://ecomplazza.serveftp.com/api/users/logout', {
         method: 'POST',
       })
 
@@ -209,7 +209,7 @@ export default function Header() {
   const checkUser = async () => {
     try {
         console.log('Checking user auth');
-        const res = await fetch('http://10.0.0.30:5000/api/users/check-auth', {
+        const res = await fetch('https://ecomplazza.serveftp.com/api/users/check-auth', {
             method: 'GET',
             credentials: 'include', // Ensure credentials are included
         });
