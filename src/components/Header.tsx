@@ -1,3 +1,4 @@
+// src/components/Header.tsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MagnifyingGlassIcon, ShoppingBagIcon } from '@heroicons/react/24/outline';
@@ -8,11 +9,10 @@ import Cart from './Cart';
 import { Product } from '../types';
 
 interface HeaderProps {
-    cartItems: Product[];
-    addToCart: (product: Product, size: string, color: string) => void;
-    removeFromCart: (index: number) => void;  // Adaugă acest rând
-  }
-  
+  cartItems: Product[];
+  addToCart: (product: Product, size: string, color: string) => void;
+  removeFromCart: (index: number) => void;
+}
 
 const categories = [
   { name: 'Women', href: '/women' },
@@ -25,11 +25,32 @@ const Header: React.FC<HeaderProps> = ({ cartItems, addToCart, removeFromCart })
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [user, setUser] = useState<{ id: string; name: string; role: string } | null>(null);
+
   useEffect(() => {
-    console.log('Header cartItems:', cartItems);
-  }, [cartItems]);
-  
-  
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetch('http://localhost:5000/api/users/verifySession', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.user) {
+            setUser(data.user);
+          }
+        })
+        .catch(error => console.error('Eroare la verificarea sesiunii:', error));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+  };
+
   return (
     <header className="bg-white">
       <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -63,14 +84,25 @@ const Header: React.FC<HeaderProps> = ({ cartItems, addToCart, removeFromCart })
                 <span className="sr-only">Search</span>
                 <MagnifyingGlassIcon className="h-6 w-6" aria-hidden="true" />
               </a>
-              <button onClick={() => setIsSignInOpen(true)} className="ml-4 p-2 text-gray-400 hover:text-gray-500">
-                <span className="sr-only">Sign In</span>
-                Sign In
-              </button>
-              <button onClick={() => setIsSignUpOpen(true)} className="ml-4 p-2 text-gray-400 hover:text-gray-500">
-                <span className="sr-only">Create Account</span>
-                Create Account
-              </button>
+              {user ? (
+                <>
+                  <span className="ml-4 p-2 text-gray-700">
+                    Hello, {user.name}
+                  </span>
+                  <button onClick={handleLogout} className="ml-4 p-2 text-gray-400 hover:text-gray-500">
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => setIsSignInOpen(true)} className="ml-4 p-2 text-gray-400 hover:text-gray-500">
+                    Sign In
+                  </button>
+                  <button onClick={() => setIsSignUpOpen(true)} className="ml-4 p-2 text-gray-400 hover:text-gray-500">
+                    Create Account
+                  </button>
+                </>
+              )}
               <div className="ml-4 flow-root lg:ml-8">
                 <button onClick={() => setIsCartOpen(true)} className="group -m-2 flex items-center p-2">
                   <ShoppingBagIcon className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
@@ -85,13 +117,13 @@ const Header: React.FC<HeaderProps> = ({ cartItems, addToCart, removeFromCart })
         </div>
       </nav>
       <SlideOver isOpen={isSignInOpen} setIsOpen={setIsSignInOpen} title="Sign In">
-        <SignInForm />
+        <SignInForm setIsOpen={setIsSignInOpen} setUser={setUser} />
       </SlideOver>
       <SlideOver isOpen={isSignUpOpen} setIsOpen={setIsSignUpOpen} title="Create Account">
-        <SignUpForm />
+        <SignUpForm setIsOpen={setIsSignUpOpen} setUser={setUser} />
       </SlideOver>
       <SlideOver isOpen={isCartOpen} setIsOpen={setIsCartOpen} title="Shopping Cart">
-      <Cart cartItems={cartItems} onClose={() => setIsCartOpen(false)} removeFromCart={removeFromCart} />  
+        <Cart cartItems={cartItems} onClose={() => setIsCartOpen(false)} removeFromCart={removeFromCart} />
       </SlideOver>
     </header>
   );
