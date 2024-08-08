@@ -1,4 +1,3 @@
-// src/App.tsx
 import React, { useState, createContext, useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
@@ -9,7 +8,10 @@ import AccessoriesPage from './pages/AccessoriesPage';
 import CheckoutPage from './pages/CheckoutPage';
 import DashboardPage from './pages/DashboardDistribuitor';
 import { CartProvider } from './contexts/CartContext';
+import { FavouritesProvider } from './contexts/FavouritesContext'; // Import FavouritesProvider
 import AdminPanelPage from './pages/AdminPanelPage';
+import FavouritesPage from './pages/FavouritesPage';
+
 interface UserContextProps {
   user: { id: string; name: string; role: string } | null;
   setUser: (user: { id: string; name: string; role: string } | null) => void;
@@ -38,20 +40,23 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 const App: React.FC = () => {
   return (
     <CartProvider>
-      <UserProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/kids" element={<KidsPage />} />
-            <Route path="/men" element={<MenPage />} />
-            <Route path="/women" element={<WomenPage />} />
-            <Route path="/accessories" element={<AccessoriesPage />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/admin-panel" element = {<AdminPanelPage/>} />
-          </Routes>
-        </Router>
-      </UserProvider>
+      <FavouritesProvider> {/* Wrap FavouritesProvider around all routes */}
+        <UserProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/kids" element={<KidsPage />} />
+              <Route path="/men" element={<MenPage />} />
+              <Route path="/women" element={<WomenPage />} />
+              <Route path="/accessories" element={<AccessoriesPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/admin-panel" element={<AdminPanelPage />} />
+              <Route path="/favourites" element={<FavouritesPage />} />
+            </Routes>
+          </Router>
+        </UserProvider>
+      </FavouritesProvider>
     </CartProvider>
   );
 };

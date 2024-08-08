@@ -17,6 +17,7 @@ export interface Product {
     selectedSize?: string;
     selectedColor?: string;
     quantity?: number;
+    favourite?: boolean;
   }
   
   export interface Order {
