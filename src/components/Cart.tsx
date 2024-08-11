@@ -1,4 +1,3 @@
-// src/components/Cart.tsx
 import React from 'react';
 import { Product } from '../types';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +11,7 @@ interface CartProps {
 const Cart: React.FC<CartProps> = ({ cartItems, onClose, removeFromCart }) => {
   const navigate = useNavigate();
 
-  // Calcularea prețului total
+  // Calculate the total price
   const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
 
   return (
@@ -34,8 +33,11 @@ const Cart: React.FC<CartProps> = ({ cartItems, onClose, removeFromCart }) => {
             {cartItems.map((item, index) => (
               <li key={index} className="py-4 flex">
                 <div className="flex-shrink-0">
-                  {/* <img src={item.imageSrc || 'https://via.placeholder.com/150'} alt={item.imageAlt || 'Product Image'} className="h-20 w-20 rounded-md object-cover" />
-             */}
+                  <img
+                    src={`https://ecomplazza.serveftp.com${item.imageUrl}`} // Adjust the image URL if necessary
+                    alt={item.name}
+                    className="h-20 w-20 rounded-md object-cover"
+                  />
                 </div>
                 <div className="ml-4 flex flex-col justify-between">
                   <div>
@@ -44,8 +46,7 @@ const Cart: React.FC<CartProps> = ({ cartItems, onClose, removeFromCart }) => {
                     <p className="text-sm text-gray-500">Size: {item.selectedSize}</p>
                   </div>
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium text-gray-900">{item.price} USD </p>
-                    <p></p>
+                    <p className="text-sm font-medium text-gray-900">{item.price} USD</p>
                     <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
                   </div>
                   <button onClick={() => removeFromCart(index)} className="text-red-500 hover:text-red-700 mt-2">

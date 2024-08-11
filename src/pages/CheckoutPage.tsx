@@ -1,4 +1,3 @@
-// src/pages/CheckoutPage.tsx
 import React, { useState } from 'react';
 import { useCart } from '../contexts/CartContext';
 import { useNavigate } from 'react-router-dom';
@@ -63,14 +62,23 @@ const CheckoutPage: React.FC = () => {
           <div>
             <ul className="divide-y divide-gray-200 mb-4">
               {cartItems.map((item, index) => (
-                <li key={index} className="py-4 flex justify-between">
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
-                    <p className="text-sm text-gray-500">Color: {item.selectedColor}</p>
-                    <p className="text-sm text-gray-500">Size: {item.selectedSize}</p>
-                    <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
+                <li key={index} className="py-4 flex items-center justify-between">
+                  <div className="flex-shrink-0">
+                    <img
+                      src={`https://ecomplazza.serveftp.com${item.imageUrl}`} // Adjust the image URL if necessary
+                      alt={item.name}
+                      className="h-20 w-20 rounded-md object-cover"
+                    />
                   </div>
-                  <p className="text-sm font-medium text-gray-900">{item.price} USD</p>
+                  <div className="ml-4 flex flex-col justify-between flex-grow">
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                      <p className="text-sm text-gray-500">Color: {item.selectedColor}</p>
+                      <p className="text-sm text-gray-500">Size: {item.selectedSize}</p>
+                      <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
+                    </div>
+                    <p className="text-sm font-medium text-gray-900">{item.price} USD</p>
+                  </div>
                 </li>
               ))}
             </ul>
