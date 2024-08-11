@@ -1,24 +1,25 @@
-// src/pages/AdminPanelPage.tsx
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useCart } from '../contexts/CartContext';
 import { useUser } from '../App';
-import { User } from '../types';
+import { User, Order } from '../types';
 
 const AdminPanelPage: React.FC = () => {
   const { cartItems, addToCart, removeFromCart } = useCart();
   const { user } = useUser();
   const [users, setUsers] = useState<User[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
     fetchUsers();
+    fetchOrders();
   }, []);
 
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://ecomplazza.serveftp.com/api/users/get', {
+      const response = await fetch('http://ecomplazza.serveftp.com/api/users/get', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
@@ -28,10 +29,23 @@ const AdminPanelPage: React.FC = () => {
     }
   };
 
+  const fetchOrders = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://ecomplazza.serveftp.com/api/orders', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      setOrders(data);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    }
+  };
+
   const handleRoleChange = async (userId: string, role: string) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://ecomplazza.serveftp.com/api/users/${userId}/role`, {
+      const response = await fetch(`http://ecomplazza.serveftp.com/api/users/${userId}/role`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +68,9 @@ const AdminPanelPage: React.FC = () => {
       <Header cartItems={cartItems} addToCart={addToCart} removeFromCart={removeFromCart} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-4xl font-extrabold text-gray-900 mb-8">Admin Panel</h1>
-        <div className="bg-white p-6 rounded-lg shadow-lg">
+
+        {/* Users Section */}
+        <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
           <h2 className="text-2xl font-bold mb-6">All Users</h2>
           <div className="overflow-auto max-h-96">
             <table className="min-w-full bg-white border-collapse border border-gray-300">
@@ -102,6 +118,33 @@ const AdminPanelPage: React.FC = () => {
                         Make Customer
                       </button>
                     </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Orders Section */}
+        <div className="bg-white p-6 rounded-lg shadow-lg">
+          <h2 className="text-2xl font-bold mb-6">All Orders</h2>
+          <div className="overflow-auto max-h-96">
+            <table className="min-w-full bg-white border-collapse border border-gray-300">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="py-3 px-4 border-b border-gray-300 text-left">Order ID</th>
+                  <th className="py-3 px-4 border-b border-gray-300 text-left">User Name</th>
+                  <th className="py-3 px-4 border-b border-gray-300 text-left">Total Price</th>
+                  <th className="py-3 px-4 border-b border-gray-300 text-left">Order Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order._id} className="hover:bg-gray-100">
+                    <td className="py-3 px-4 border-b border-gray-300">{order._id}</td>
+                    <td className="py-3 px-4 border-b border-gray-300">{order.user.name}</td>
+                    <td className="py-3 px-4 border-b border-gray-300">${order.total.toFixed(2)}</td>
+                    <td className="py-3 px-4 border-b border-gray-300">{new Date(order.date).toLocaleDateString()}</td>
                   </tr>
                 ))}
               </tbody>
