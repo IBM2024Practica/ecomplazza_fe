@@ -50,7 +50,7 @@ const KidsPage: React.FC = () => {
           </aside>
           <section className="w-3/4">
             <h2 className="text-2xl font-bold mb-4">Kids' Products</h2>
-            <ProductList products={products} addToCart={addToCart} />
+            <ProductList products={products} addToCart={addToCart} userRole={user?.role || 'guest'}/>
           </section>
         </div>
       </main>

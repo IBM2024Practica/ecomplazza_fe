@@ -1,18 +1,24 @@
 import React, { useState } from 'react';
 import ProductModal from './ProductModal';
+import EditProduct from './EditProduct';
 import { Product } from '../types';
-import { HeartIcon } from '@heroicons/react/24/outline';
+import { HeartIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { useFavourites } from '../contexts/FavouritesContext';
+import { useUser } from '../App';
 
 interface ProductListProps {
   products: Product[];
   addToCart: (product: Product, size: string, color: string) => void;
+  userRole: string;
 }
 
-const ProductList: React.FC<ProductListProps> = ({ products, addToCart }) => {
+const ProductList: React.FC<ProductListProps> = ({ products, addToCart, userRole }) => {
+  const [currentProducts, setCurrentProducts] = useState<Product[]>(products);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditProductOpen, setIsEditProductOpen] = useState(false);
   const { favouriteItems, toggleFavourite } = useFavourites();
+  const { user } = useUser();
 
   const openModal = (product: Product) => {
     setSelectedProduct(product);
@@ -24,6 +30,25 @@ const ProductList: React.FC<ProductListProps> = ({ products, addToCart }) => {
     setSelectedProduct(null);
   };
 
+  const openEditProductModal = (product: Product) => {
+    setSelectedProduct(product);
+    setIsEditProductOpen(true);
+  };
+
+  const closeEditProductModal = () => {
+    setIsEditProductOpen(false);
+    setSelectedProduct(null);
+  };
+
+  const handleSaveProductDetails = (updatedProduct: Product) => {
+    setCurrentProducts(prevProducts =>
+      prevProducts.map(product =>
+        product._id === updatedProduct._id ? updatedProduct : product
+      )
+    );
+    closeEditProductModal();
+  };
+
   const isFavourite = (product: Product) =>
     favouriteItems.some((fav) => fav._id === product._id);
 
@@ -31,9 +56,13 @@ const ProductList: React.FC<ProductListProps> = ({ products, addToCart }) => {
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-          <div key={product._id} className="bg-white shadow-md rounded-lg p-4" onClick={() => openModal(product)}>
+          <div
+            key={product._id}
+            className="bg-white shadow-md rounded-lg p-4 relative"
+            onClick={() => openModal(product)}
+          >
             <img
-              src={`https://ecomplazza.serveftp.com/${product.imageUrl}`}
+              src={`https://ecomplazza.serveftp.com${product.imageUrl}`} 
               alt={product.name}
               className="w-full h-48 object-cover rounded-lg mb-4"
             />
@@ -52,15 +81,37 @@ const ProductList: React.FC<ProductListProps> = ({ products, addToCart }) => {
             >
               <HeartIcon className="h-6 w-6" aria-hidden="true" />
             </button>
+            {user?.role === 'distributor' && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openEditProductModal(product);
+                }}
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              >
+                <PencilIcon className="h-6 w-6" aria-hidden="true" />
+              </button>
+            )}
           </div>
         ))}
       </div>
-      {selectedProduct && (
+
+      {selectedProduct && isModalOpen && (
         <ProductModal
           isOpen={isModalOpen}
           onClose={closeModal}
           product={selectedProduct}
           addToCart={addToCart}
+          userRole={userRole}
+        />
+      )}
+
+      {selectedProduct && isEditProductOpen && (
+        <EditProduct
+          isOpen={isEditProductOpen}
+          onClose={closeEditProductModal}
+          product={selectedProduct}
+          onSave={handleSaveProductDetails}
         />
       )}
     </>

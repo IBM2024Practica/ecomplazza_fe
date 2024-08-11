@@ -1,24 +1,24 @@
 // src/types.ts
 export interface Product {
-    _id: string;
-    name: string;
-    price: number;
-    brand: string;
-    category: string;
-    subcategory: string;
-    description: string;
-    material: string;
-    color: string;
-    sizes: Array<{
-      size: string;
-      quantity: number;
-    }>;
-    imageUrl: string; // Adăugat câmpul pentru imagine
-    selectedSize?: string;
-    selectedColor?: string;
-    quantity?: number;
-    favourite?: boolean;
-  }
+  _id: string;
+  name: string;
+  price: number;
+  brand: string;
+  category: string;
+  subcategory: string;
+  description: string;
+  material: string;
+  color: string;
+  sizes: Array<{
+    size: string;
+    quantity: number;
+  }>;
+  imageUrl: string[];
+  selectedSize?: string;
+  selectedColor?: string;
+  quantity?: number;
+  favourite?: boolean;
+}
   
   export interface Order {
     _id: string;

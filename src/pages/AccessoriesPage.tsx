@@ -28,7 +28,7 @@ const AccessoriesPage: React.FC = () => {
       if (filters.minPrice !== '') params.minPrice = filters.minPrice;
       if (filters.maxPrice !== '') params.maxPrice = filters.maxPrice;
       if (filters.materials.length > 0) params.material = filters.materials.join(',');
-      const response = await axios.get('https://ecomplazza.serveftp.com/api/products/products', { params });
+      const response = await axios.get('http://ecomplazza.serveftp.com/api/products/products', { params });
       setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -56,7 +56,7 @@ const AccessoriesPage: React.FC = () => {
           </aside>
           <section className="w-3/4">
             <h2 className="text-2xl font-bold mb-4">Accessories</h2>
-            <ProductList products={products} addToCart={addToCart} />
+            <ProductList products={products} addToCart={addToCart} userRole={user?.role || 'guest'}/>
           </section>
         </div>
       </main>

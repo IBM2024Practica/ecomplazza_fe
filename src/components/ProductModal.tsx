@@ -7,6 +7,7 @@ interface ProductModalProps {
   onClose: () => void;
   product: any;
   addToCart: (product: any, size: string, color: string) => void;
+  userRole: string;
 }
 
 const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, addToCart }) => {

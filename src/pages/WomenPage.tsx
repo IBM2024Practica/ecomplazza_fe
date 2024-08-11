@@ -1,4 +1,4 @@
-// src/pages/WomenPage.tsx
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
@@ -74,7 +74,11 @@ const WomenPage: React.FC = () => {
           </aside>
           <section className="w-3/4">
             <h2 className="text-2xl font-bold mb-4">Women's Products</h2>
-            <ProductList products={products} addToCart={addToCart} />
+            <ProductList
+              products={products}
+              addToCart={addToCart}
+              userRole={user?.role || 'guest'} // Use optional chaining and provide a fallback
+            />
           </section>
         </div>
       </main>

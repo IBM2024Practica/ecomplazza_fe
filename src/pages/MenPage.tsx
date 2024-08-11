@@ -43,7 +43,7 @@ const MenPage: React.FC = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex">
           <aside className="w-1/4 pr-4"><h2 className="text-xl font-bold mb-4">Filters</h2><SubcategoryFilter onChange={handleSubcategoryChange} /><PriceFilter onChange={handlePriceChange} /><MaterialFilter onChange={handleMaterialChange} /></aside>
-          <section className="w-3/4"><h2 className="text-2xl font-bold mb-4">Men's Products</h2><ProductList products={products} addToCart={addToCart} /></section>
+          <section className="w-3/4"><h2 className="text-2xl font-bold mb-4">Men's Products</h2><ProductList products={products} addToCart={addToCart} userRole={user?.role || 'guest'}/></section>
         </div>
       </main>
     </div>
