@@ -32,7 +32,7 @@ const EditProduct: React.FC<EditProductProps> = ({ isOpen, onClose, product, onS
     setSizes([...sizes, { size: '', quantity: 0 }]);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Create an updated product object
     const updatedProduct: Product = {
       ...product,
@@ -46,10 +46,33 @@ const EditProduct: React.FC<EditProductProps> = ({ isOpen, onClose, product, onS
       color,
       sizes
     };
-    console.log(updatedProduct);
-    onSave(updatedProduct);
-    onClose();
+  
+    try {
+      // Make the PUT request to update the product
+      const response = await fetch(`http://localhost:5000/api/products/${product._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedProduct),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update product');
+      }
+  
+      const result = await response.json();
+      console.log('Product updated successfully:', result);
+  
+      // Notify the parent component to update the local state
+      onSave(updatedProduct);
+      onClose();
+    } catch (error) {
+      console.error('Error updating product:', error);
+      alert('An error occurred while updating the product.');
+    }
   };
+  
 
   return (
     <Transition.Root show={isOpen} as={React.Fragment}>

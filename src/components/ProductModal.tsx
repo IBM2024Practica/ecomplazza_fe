@@ -14,10 +14,38 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, a
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (selectedSize && selectedColor) {
+      // Update the cart
       addToCart(product, selectedSize, selectedColor);
-      onClose();
+
+      // Update the product quantity in the backend
+      try {
+        const response = await fetch(`http://localhost:5000/api/products/${product._id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            sizes: product.sizes.map((size: any) => 
+              size.size === selectedSize 
+                ? { ...size, quantity: size.quantity - 1 }
+                : size
+            ),
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update product quantity');
+        }
+
+        const updatedProduct = await response.json();
+        console.log('Product updated successfully:', updatedProduct);
+        onClose();
+      } catch (error) {
+        console.error('Error updating product quantity:', error);
+        alert('An error occurred while updating the product quantity.');
+      }
     } else {
       alert('Please select a size and a color.');
     }
@@ -74,8 +102,8 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, a
                   >
                     <option value="">Select size</option>
                     {product.sizes.map((size: any) => (
-                      <option key={size.size} value={size.size}>
-                        {size.size}
+                      <option key={size.size} value={size.size} disabled={size.quantity === 0}>
+                        {size.size} {size.quantity === 0 && '(Out of Stock)'}
                       </option>
                     ))}
                   </select>
@@ -95,6 +123,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, product, a
                   <button
                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     onClick={handleAddToCart}
+                    disabled={!selectedSize || !selectedColor}
                   >
                     Add to Cart
                   </button>
