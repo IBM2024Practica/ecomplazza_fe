@@ -7,7 +7,7 @@ import Footer from '../components/Footer';
 import SignInForm from '../components/SignInForm';
 import SlideOver from '../components/SlideOver';
 import { Product } from '../types';
-import { useUser } from '../App';
+import { useUser } from '../contexts/UserContext'; 
 
 const CheckoutPage: React.FC = () => {
   const { cartItems, clearCart } = useCart();
@@ -63,19 +63,24 @@ const CheckoutPage: React.FC = () => {
           <div>
             <ul className="divide-y divide-gray-200 mb-4">
               {cartItems.map((item, index) => (
-                <li key={index} className="py-4 flex justify-between">
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                <li key={index} className="py-4 flex items-center space-x-4">
+                  <img
+                    src={`https://ecomplazza.serveftp.com${item.imageUrl}`}
+                    alt={item.name}
+                    className="w-24 h-24 rounded-md object-cover"
+                  />
+                  <div className="flex-1">
+                    <h3 className="text-lg font-medium text-gray-900">{item.name}</h3>
                     <p className="text-sm text-gray-500">Color: {item.selectedColor}</p>
                     <p className="text-sm text-gray-500">Size: {item.selectedSize}</p>
                     <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
                   </div>
-                  <p className="text-sm font-medium text-gray-900">{item.price} USD</p>
+                  <p className="text-lg font-medium text-gray-900">{item.price} USD</p>
                 </li>
               ))}
             </ul>
             <div className="border-t border-gray-200 pt-4">
-              <p className="text-lg font-semibold">Total: ${totalPrice.toFixed(2)}</p>
+              <p className="text-xl font-semibold">Total: ${totalPrice.toFixed(2)}</p>
               <div className="mt-4">
                 <label htmlFor="address" className="block text-sm font-medium text-gray-700">
                   Shipping Address

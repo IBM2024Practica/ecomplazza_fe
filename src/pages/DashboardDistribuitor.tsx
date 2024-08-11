@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { useUser } from '../contexts/UserContext';
 import { useCart } from '../contexts/CartContext';
-import { useUser } from '../App';
+
 import axios from 'axios';
 import { Product } from '../types';
+
 
 const DashboardPage: React.FC = () => {
   const { cartItems, addToCart, removeFromCart } = useCart();

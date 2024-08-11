@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import KidsPage from './pages/KidsPage';
@@ -8,40 +8,16 @@ import AccessoriesPage from './pages/AccessoriesPage';
 import CheckoutPage from './pages/CheckoutPage';
 import DashboardPage from './pages/DashboardDistribuitor';
 import { CartProvider } from './contexts/CartContext';
-import { FavouritesProvider } from './contexts/FavouritesContext'; // Import FavouritesProvider
+import { FavouritesProvider } from './contexts/FavouritesContext';
 import AdminPanelPage from './pages/AdminPanelPage';
 import FavouritesPage from './pages/FavouritesPage';
-
-interface UserContextProps {
-  user: { id: string; name: string; role: string } | null;
-  setUser: (user: { id: string; name: string; role: string } | null) => void;
-}
-
-const UserContext = createContext<UserContextProps | undefined>(undefined);
-
-export const useUser = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
-  }
-  return context;
-};
-
-const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<{ id: string; name: string; role: string } | null>(null);
-
-  return (
-    <UserContext.Provider value={{ user, setUser }}>
-      {children}
-    </UserContext.Provider>
-  );
-};
+import { UserProvider } from './contexts/UserContext'; // Importă UserProvider
 
 const App: React.FC = () => {
   return (
-    <CartProvider>
+    <UserProvider> {/* Mută UserProvider aici */}
       <FavouritesProvider> 
-        <UserProvider>
+        <CartProvider>
           <Router>
             <Routes>
               <Route path="/" element={<HomePage />} />
@@ -55,9 +31,9 @@ const App: React.FC = () => {
               <Route path="/favourites" element={<FavouritesPage />} />
             </Routes>
           </Router>
-        </UserProvider>
+        </CartProvider>
       </FavouritesProvider>
-    </CartProvider>
+    </UserProvider>
   );
 };
 

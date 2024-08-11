@@ -9,7 +9,7 @@ import Cart from './Cart';
 import FavouritesPage from '../pages/FavouritesPage';
 import { Product } from '../types';
 import { useCart } from '../contexts/CartContext';
-import { useUser } from '../App';
+import { useUser } from '../contexts/UserContext'; // Importă useUser din UserContext
 
 interface HeaderProps {
   cartItems: Product[];
@@ -114,7 +114,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, addToCart, removeFromCart })
               {user ? (
                 <>
                   <span className="ml-4 p-2 text-gray-700">
-                    Hello, {user.name}
+                    Hello, {user.username}
                   </span>
                   <button onClick={handleLogout} className="ml-4 p-2 text-gray-400 hover:text-gray-500">
                     Logout

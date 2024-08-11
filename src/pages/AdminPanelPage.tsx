@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useCart } from '../contexts/CartContext';
-import { useUser } from '../App';
+import { useUser } from '../contexts/UserContext';
 import { User, Order } from '../types';
 
 const AdminPanelPage: React.FC = () => {

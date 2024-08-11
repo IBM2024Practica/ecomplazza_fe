@@ -19,7 +19,7 @@ const FavouritesPage: React.FC = () => {
               <li key={product._id} className="py-4 flex">
                 <div className="flex-shrink-0">
                   <img
-                    src={`localhost:3000/${product.imageUrl}`}
+                    src={`https://ecomplazza.serveftp.com${product.imageUrl}`}
                     alt={product.name}
                     className="h-20 w-20 rounded-md object-cover"
                   />

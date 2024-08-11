@@ -8,7 +8,7 @@ import PriceFilter from '../components/PriceFilter';
 import MaterialFilter from '../components/MaterialFilter';
 import { Product } from '../types';
 import { useCart } from '../contexts/CartContext';
-import { useUser } from '../App';
+import { useUser } from '../contexts/UserContext'; 
 
 const AccessoriesPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);

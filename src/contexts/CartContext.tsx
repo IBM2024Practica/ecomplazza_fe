@@ -1,8 +1,15 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { Product } from '../types';
+import { useUser } from '../contexts/UserContext'; 
+
+interface CartItem extends Product {
+  selectedSize: string;
+  selectedColor: string;
+  quantity: number;
+}
 
 interface CartContextProps {
-  cartItems: Product[];
+  cartItems: CartItem[];
   addToCart: (product: Product, size: string, color: string) => void;
   removeFromCart: (index: number) => void;
   clearCart: () => void;
@@ -11,24 +18,43 @@ interface CartContextProps {
 const CartContext = createContext<CartContextProps | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [cartItems, setCartItems] = useState<Product[]>([]);
+  const { user } = useUser(); // Obține utilizatorul curent
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
-    const savedCartItems = localStorage.getItem('cartItems');
-    if (savedCartItems) {
-      setCartItems(JSON.parse(savedCartItems));
+    if (user) {
+      const savedCartItems = localStorage.getItem(`cartItems_${user._id}`);
+      if (savedCartItems) {
+        setCartItems(JSON.parse(savedCartItems));
+      }
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  }, [cartItems]);
+    if (user) {
+      localStorage.setItem(`cartItems_${user._id}`, JSON.stringify(cartItems));
+    }
+  }, [cartItems, user]);
 
   const addToCart = (product: Product, size: string, color: string) => {
-    setCartItems((prevCartItems) => [
-      ...prevCartItems,
-      { ...product, selectedSize: size, selectedColor: color, quantity: 1 },
-    ]);
+    setCartItems((prevCartItems) => {
+      const existingItemIndex = prevCartItems.findIndex(
+        (item) => item.selectedSize === size && item.selectedColor === color
+      );
+
+      if (existingItemIndex > -1) {
+        // Update quantity if item already exists
+        const updatedItems = [...prevCartItems];
+        updatedItems[existingItemIndex].quantity += 1;
+        return updatedItems;
+      }
+
+      // Add new item to cart
+      return [
+        ...prevCartItems,
+        { ...product, selectedSize: size, selectedColor: color, quantity: 1 },
+      ];
+    });
   };
 
   const removeFromCart = (index: number) => {
