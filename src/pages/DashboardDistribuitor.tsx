@@ -1,17 +1,15 @@
-// src/pages/DashboardPage.tsx
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useCart } from '../contexts/CartContext';
 import { useUser } from '../App';
 import axios from 'axios';
-import { Product, Order } from '../types';
+import { Product } from '../types';
 
 const DashboardPage: React.FC = () => {
   const { cartItems, addToCart, removeFromCart } = useCart();
   const { user } = useUser();
   const [products, setProducts] = useState<Product[]>([]);
-  const [orders, setOrders] = useState<Order[]>([]);
   const [newProduct, setNewProduct] = useState<Partial<Product>>({
     name: '',
     price: 0,
@@ -23,31 +21,20 @@ const DashboardPage: React.FC = () => {
     color: '',
     sizes: [{ size: '', quantity: 0 }],
   });
-  const [image, setImage] = useState<File | null>(null); // Adăugat pentru gestionarea imaginii
+  const [image, setImage] = useState<File | null>(null);
 
   useEffect(() => {
     fetchProducts();
-    fetchOrders();
+    console.log(products);
   }, []);
 
   const fetchProducts = async () => {
     try {
       const response = await axios.get('https://ecomplazza.serveftp.com/api/products/products');
+      console.log('Fetched products:', response.data);
       setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
-    }
-  };
-
-  const fetchOrders = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('https://ecomplazza.serveftp.com/api/orders', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setOrders(response.data);
-    } catch (error) {
-      console.error('Error fetching orders:', error);
     }
   };
 
@@ -78,22 +65,42 @@ const DashboardPage: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+
       fetchProducts();
-      setNewProduct({
-        name: '',
-        price: 0,
-        brand: '',
-        category: '',
-        subcategory: '',
-        description: '',
-        material: '',
-        color: '',
-        sizes: [{ size: '', quantity: 0 }],
-      });
-      setImage(null); // Resetare imagine
+      resetForm();
     } catch (error) {
       console.error('Error adding product:', error);
     }
+  };
+
+  const resetForm = () => {
+    setNewProduct({
+      name: '',
+      price: 0,
+      brand: '',
+      category: '',
+      subcategory: '',
+      description: '',
+      material: '',
+      color: '',
+      sizes: [{ size: '', quantity: 0 }],
+    });
+    setImage(null);
+  };
+
+  const handleAddSize = () => {
+    setNewProduct(prev => ({
+      ...prev,
+      sizes: [...(prev.sizes || []), { size: '', quantity: 0 }],
+    }));
+  };
+
+  const handleSizeChange = (index: number, field: 'size' | 'quantity', value: string) => {
+    setNewProduct(prev => {
+      const sizes = [...(prev.sizes || [])];
+      sizes[index] = { ...sizes[index], [field]: field === 'quantity' ? parseInt(value) : value };
+      return { ...prev, sizes };
+    });
   };
 
   return (
@@ -109,7 +116,7 @@ const DashboardPage: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700">Name</label>
                 <input
                   type="text"
-                  value={newProduct.name}
+                  value={newProduct.name || ''}
                   onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                   required
@@ -119,7 +126,7 @@ const DashboardPage: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700">Price</label>
                 <input
                   type="number"
-                  value={newProduct.price}
+                  value={newProduct.price || ''}
                   onChange={(e) => setNewProduct({ ...newProduct, price: parseFloat(e.target.value) })}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                   required
@@ -193,6 +200,34 @@ const DashboardPage: React.FC = () => {
                   required
                 />
               </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Sizes</label>
+                {newProduct.sizes?.map((size, index) => (
+                  <div key={index} className="flex gap-4 mb-2">
+                    <input
+                      type="text"
+                      value={size.size || ''}
+                      onChange={(e) => handleSizeChange(index, 'size', e.target.value)}
+                      placeholder="Size"
+                      className="block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                    />
+                    <input
+                      type="number"
+                      value={size.quantity}
+                      onChange={(e) => handleSizeChange(index, 'quantity', e.target.value)}
+                      placeholder="Quantity"
+                      className="block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                    />
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={handleAddSize}
+                  className="mt-2 bg-green-600 text-white py-1 px-2 rounded-md hover:bg-green-700"
+                >
+                  Add Another Size
+                </button>
+              </div>
               <button
                 type="submit"
                 className="mt-4 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700"
@@ -200,29 +235,6 @@ const DashboardPage: React.FC = () => {
                 Add Product
               </button>
             </form>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold mb-4">View All Orders</h2>
-            <div className="bg-white p-4 rounded shadow overflow-auto max-h-96">
-              {orders.map((order) => (
-                <div key={order._id} className="mb-4 p-4 border rounded-md shadow">
-                  <h3 className="text-lg font-semibold mb-2">Order ID: {order._id}</h3>
-                  <p className="text-sm text-gray-700 mb-1"><strong>User:</strong> {order.user.name}</p>
-                  <p className="text-sm text-gray-700 mb-1"><strong>Total:</strong> ${order.total}</p>
-                  <p className="text-sm text-gray-700 mb-1"><strong>Date:</strong> {new Date(order.date).toLocaleDateString()}</p>
-                  <p className="text-sm text-gray-700 mb-1"><strong>Address:</strong> {order.address}</p>
-                  <div className="mt-2">
-                    <strong>Products:</strong>
-                    <ul className="list-disc list-inside">
-                      {order.products.map((product: Product) => (
-                        <li key={product._id}>{product.name}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              ))}
-            </div>
           </section>
         </div>
       </main>

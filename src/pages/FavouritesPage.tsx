@@ -1,46 +1,49 @@
-// src/pages/FavouritesPage.tsx
 import React from 'react';
 import { useFavourites } from '../contexts/FavouritesContext';
-import { useNavigate } from 'react-router-dom';
+import { Product } from '../types';
 
 const FavouritesPage: React.FC = () => {
   const { favouriteItems, toggleFavourite } = useFavourites();
-  const navigate = useNavigate();
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">My Favourites</h2>
-      {favouriteItems.length === 0 ? (
-        <p>Your favourites list is empty.</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {favouriteItems.map((product) => (
-            <div key={product._id} className="bg-white shadow-md rounded-lg p-4">
-              <img
-                src={`https://ecomplazza.serveftp.com/${product.imageUrl}`}
-                alt={product.name}
-                className="w-full h-48 object-cover rounded-lg mb-4"
-              />
-              <h3 className="text-lg font-bold">{product.name}</h3>
-              <p className="text-gray-500">{product.description}</p>
-              <p className="text-gray-900 font-semibold">{product.price} USD</p>
-              <p className="text-gray-500">Brand: {product.brand}</p>
-              <p className="text-gray-500">Material: {product.material}</p>
-              <p className="text-gray-500">Color: {product.color}</p>
-              
-              <button
-                onClick={() => toggleFavourite(product)}
-                className="text-red-500 hover:text-red-700 mt-2"
-              >
-                Remove from Favourites
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-      <button onClick={() => navigate('/')} className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">
-        Back to Home
-      </button>
+    <div className="relative w-full max-w-md bg-white shadow-xl">
+      <div className="flex justify-between items-center p-4 border-b border-gray-200">
+        <h2 className="text-xl font-bold">My Favourites</h2>
+      </div>
+      <div className="p-4">
+        {favouriteItems.length === 0 ? (
+          <p className="text-gray-500">Your favourites list is empty.</p>
+        ) : (
+          <ul className="divide-y divide-gray-200">
+            {favouriteItems.map((product: Product) => (
+              <li key={product._id} className="py-4 flex">
+                <div className="flex-shrink-0">
+                  <img
+                    src={`localhost:3000/${product.imageUrl}`}
+                    alt={product.name}
+                    className="h-20 w-20 rounded-md object-cover"
+                  />
+                </div>
+                <div className="ml-4 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-900">{product.name}</h3>
+                    <p className="text-sm text-gray-500">Color: {product.color}</p>
+                    <p className="text-sm text-gray-500">Material: {product.material}</p>
+                    <p className="text-sm text-gray-500">Brand: {product.brand}</p>
+                    <p className="text-sm font-medium text-gray-900">{product.price} USD</p>
+                  </div>
+                  <button
+                    onClick={() => toggleFavourite(product)}
+                    className="text-red-500 hover:text-red-700 mt-2"
+                  >
+                    Remove from Favourites
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,11 +1,12 @@
-// src/components/Header.tsx
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MagnifyingGlassIcon, ShoppingBagIcon, HeartIcon} from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, ShoppingBagIcon, HeartIcon } from '@heroicons/react/24/outline';
 import SlideOver from './SlideOver';
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import Cart from './Cart';
+import FavouritesPage from '../pages/FavouritesPage';
 import { Product } from '../types';
 import { useCart } from '../contexts/CartContext';
 import { useUser } from '../App';
@@ -16,7 +17,7 @@ interface HeaderProps {
   removeFromCart: (index: number) => void;
 }
 
-const categories = [    
+const categories = [
   { name: 'Women', href: '/women' },
   { name: 'Men', href: '/men' },
   { name: 'Kids', href: '/kids' },
@@ -27,6 +28,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, addToCart, removeFromCart })
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isFavouritesOpen, setIsFavouritesOpen] = useState(false); // New state for Favourites SlideOver
   const { user, setUser } = useUser();
 
   useEffect(() => {
@@ -35,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, addToCart, removeFromCart })
       fetch('https://ecomplazza.serveftp.com/api/users/verifySession', {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       })
         .then(response => response.json())
@@ -44,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, addToCart, removeFromCart })
             setUser(data.user);
           }
         })
-        .catch(error => console.error('Eroare la verificarea sesiunii:', error));
+        .catch(error => console.error('Error verifying session:', error));
     }
   }, [setUser]);
 
@@ -70,7 +72,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, addToCart, removeFromCart })
             </div>
 
             <div className="flex h-14 space-x-8 overflow-x-auto border-t px-4 pb-px sm:h-full sm:justify-center sm:overflow-visible sm:border-t-0 sm:pb-0">
-              {categories.map((category) => (
+              {categories.map(category => (
                 <Link
                   key={category.name}
                   to={category.href}
@@ -95,13 +97,13 @@ const Header: React.FC<HeaderProps> = ({ cartItems, addToCart, removeFromCart })
                   Admin Panel
                 </Link>
               )}
-              <Link
-                to="/favourites"
+              <button
+                onClick={() => setIsFavouritesOpen(true)} // Open Favourites SlideOver
                 className="relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800"
               >
                 <HeartIcon className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
                 Favourites
-              </Link>
+              </button>
             </div>
 
             <div className="flex flex-1 items-center justify-end">
@@ -149,6 +151,9 @@ const Header: React.FC<HeaderProps> = ({ cartItems, addToCart, removeFromCart })
       </SlideOver>
       <SlideOver isOpen={isCartOpen} setIsOpen={setIsCartOpen} title="Shopping Cart">
         <Cart cartItems={cartItems} onClose={() => setIsCartOpen(false)} removeFromCart={removeFromCart} />
+      </SlideOver>
+      <SlideOver isOpen={isFavouritesOpen} setIsOpen={setIsFavouritesOpen} title="My Favourites">
+        <FavouritesPage />
       </SlideOver>
     </header>
   );

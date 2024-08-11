@@ -40,7 +40,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 const App: React.FC = () => {
   return (
     <CartProvider>
-      <FavouritesProvider> {/* Wrap FavouritesProvider around all routes */}
+      <FavouritesProvider> 
         <UserProvider>
           <Router>
             <Routes>
