@@ -67,7 +67,7 @@ const KidsPage: React.FC = () => {
             <BrandFilter onChange={(selected) => setFilters((prev) => ({ ...prev, brands: selected }))} />
           </aside>
           <section className="w-3/4">
-            <h2 className="text-2xl font-bold mb-4">Women's Products</h2>
+            <h2 className="text-2xl font-bold mb-4">Kids's Products</h2>
             <ProductList products={products} />
           </section>
         </div>

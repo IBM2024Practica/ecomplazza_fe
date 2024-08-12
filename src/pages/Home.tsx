@@ -14,7 +14,7 @@ const Home: React.FC = () => {
         </p>
         <div className="mt-10">
           <a
-            href="#explore"
+            href="/women"
             className="bg-indigo-600 text-white py-3 px-6 rounded-md text-lg font-semibold hover:bg-indigo-700 transition-colors duration-300 ease-in-out"
           >
             Start Exploring

@@ -39,7 +39,7 @@ const MenPage: React.FC = () => {
 
       const queryString = new URLSearchParams(params).toString();
       const response = await fetch(`https://ecomplazza.serveftp.com/api/products/products?${queryString}`);
-      
+    
       if (!response.ok) {
         throw new Error('Failed to fetch products');
       }
@@ -67,7 +67,7 @@ const MenPage: React.FC = () => {
             <BrandFilter onChange={(selected) => setFilters((prev) => ({ ...prev, brands: selected }))} />
           </aside>
           <section className="lg:w-3/4">
-            <h2 className="text-3xl font-bold mb-6">Women's Products</h2>
+            <h2 className="text-3xl font-bold mb-6">Men's Products</h2>
             <ProductList products={products} />
           </section>
         </div>

@@ -3,14 +3,24 @@ import { Link } from 'react-router-dom';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import CartSlideOver from './CartSlideOver';
+import FavoriteSlideOver from './FavoriteSlideOver';
 import { useUser } from '../context/UserContext';
+import { useFavorite } from '../context/FavoriteContext';
 import { ShoppingCartIcon, HeartIcon, UserIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
 
 const Header: React.FC = () => {
   const [isSignInOpen, setSignInOpen] = useState(false);
   const [isSignUpOpen, setSignUpOpen] = useState(false);
   const { user, logout } = useUser();
+  const { fetchFavorites } = useFavorite();
   const [isCartOpen, setCartOpen] = useState(false);
+  const [isFavoriteOpen, setFavoriteOpen] = useState(false);
+
+  const openFavoriteSlideOver = () => {
+    fetchFavorites();
+    setFavoriteOpen(true);
+  };
+
   return (
     <header className="bg-white shadow-md">
       <div className="container mx-auto p-4 flex justify-between items-center">
@@ -39,9 +49,12 @@ const Header: React.FC = () => {
           )}
         </nav>
         <div className="flex items-center space-x-4 text-gray-700">
-          <Link to="/favorites" className="hover:text-gray-900 transition duration-200">
+          <button
+            onClick={openFavoriteSlideOver}
+            className="relative hover:text-gray-200 transition-colors duration-300 ease-in-out"
+          >
             <HeartIcon className="h-6 w-6" />
-          </Link>
+          </button>
           <button
             onClick={() => setCartOpen(true)}
             className="relative hover:text-gray-200 transition-colors duration-300 ease-in-out"
@@ -82,8 +95,9 @@ const Header: React.FC = () => {
       <SignIn open={isSignInOpen} onClose={() => setSignInOpen(false)} />
       <SignUp open={isSignUpOpen} onClose={() => setSignUpOpen(false)} />
       <CartSlideOver isOpen={isCartOpen} onClose={() => setCartOpen(false)} />
+      <FavoriteSlideOver isOpen={isFavoriteOpen} onClose={() => setFavoriteOpen(false)} />
     </header>
   );
-}
+};
 
 export default Header;

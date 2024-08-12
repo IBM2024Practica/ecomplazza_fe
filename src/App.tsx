@@ -5,6 +5,8 @@ import Home from './pages/Home';
 import Women from './pages/Women';
 import Men from './pages/Men';
 import Kids from './pages/Kids';
+import { CartProvider } from './context/CartContext';
+import { FavoriteProvider } from './context/FavoriteContext';
 import { UserProvider } from './context/UserContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import DashboardPage from './pages/DashboardPage';
@@ -13,6 +15,8 @@ import AdminDashboardPage from './pages/AdminDashboardPage';
 const App: React.FC = () => {
   return (
     <UserProvider>
+      <CartProvider>
+      <FavoriteProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -25,6 +29,8 @@ const App: React.FC = () => {
           {/* Alte rute pot fi adăugate aici */}
         </Routes>
       </Router>
+      </FavoriteProvider>
+      </CartProvider>
     </UserProvider>
   );
 };
