@@ -34,7 +34,7 @@ const Header: React.FC = () => {
           )}
           {user && user.role === 'admin' && (
             <Link to="/admin" className="hover:text-gray-900 transition duration-200">
-              Admin Panel
+              Admin Dashboard
             </Link>
           )}
         </nav>

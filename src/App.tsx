@@ -9,6 +9,7 @@ import { UserProvider } from './context/UserContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import DashboardPage from './pages/DashboardPage';
 import CheckoutPage from './pages/CheckoutPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 const App: React.FC = () => {
   return (
     <UserProvider>
@@ -20,7 +21,7 @@ const App: React.FC = () => {
           <Route path="/kids" element={<Kids />} />
           <Route path="/dashboard" element={<ProtectedRoute element={DashboardPage} roles={['distributor']} />} />
           <Route path="/checkout" element={<ProtectedRoute element={CheckoutPage}  roles={['customer', 'distributor', 'admin'] } />}/>
-          
+          <Route path="/admin" element={<ProtectedRoute element={AdminDashboardPage} roles={['admin']} />} />
           {/* Alte rute pot fi adăugate aici */}
         </Routes>
       </Router>
