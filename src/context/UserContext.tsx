@@ -32,7 +32,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const verifySession = async (token: string) => {
     try {
-      const response = await axios.get('/api/users/verifySession', {
+      const response = await axios.get('https://ecomplazza.serveftp.com/api/users/verifySession', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUser(response.data.user);
@@ -51,7 +51,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
-    axios.post('/api/users/logout'); // Optional: Logout request to server
+    axios.post('https://ecomplazza.serveftp.com/api/users/logout'); // Optional: Logout request to server
   };
 
   return (

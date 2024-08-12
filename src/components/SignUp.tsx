@@ -4,6 +4,8 @@
 import { useState } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { useUser } from '../context/UserContext';
+import axios from 'axios';
 
 interface SignUpProps {
   onClose: () => void;
@@ -11,6 +13,29 @@ interface SignUpProps {
 }
 
 const SignUp: React.FC<SignUpProps> = ({ onClose, open }) => {
+  const { login } = useUser();
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    try {
+      const response = await axios.post('https://ecomplazza.serveftp.com/api/users/register', {
+        username,
+        email,
+        password,
+      });
+      login(response.data.token); // Stochează token-ul și setează userul în context
+      onClose(); // Închide slide-over-ul după înregistrare
+    } catch (err) {
+      setError('Registration failed. Please try again.');
+    }
+  };
+
   return (
     <Dialog open={open} onClose={onClose} className="relative z-10">
       <div className="fixed inset-0 bg-black bg-opacity-50" />
@@ -40,22 +65,29 @@ const SignUp: React.FC<SignUpProps> = ({ onClose, open }) => {
                   </div>
                 </div>
                 <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                  <form>
+                  <form onSubmit={handleSignUp}>
                     <input
                       type="text"
-                      placeholder="Name"
+                      placeholder="Username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                       className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                     />
                     <input
                       type="email"
                       placeholder="Email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                     />
                     <input
                       type="password"
                       placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       className="w-full p-3 mb-6 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                     />
+                    {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
                     <button 
                       type="submit" 
                       className="w-full p-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors duration-300 ease-in-out"
