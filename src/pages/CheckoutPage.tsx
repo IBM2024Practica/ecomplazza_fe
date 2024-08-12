@@ -60,7 +60,7 @@ const CheckoutPage: React.FC = () => {
 
       if (response.status === 200) {
         alert('Order placed successfully!');
-        navigate('/'); // Redirect to an order confirmation page
+        navigate('/'); // Reirect to an order confirmation page
       }
     } catch (error) {
       console.error('Error placing order:', error);
